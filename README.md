@@ -1,4 +1,4 @@
-# National-Police-College-Recruitment-Website
+# National Police College Recruitment Website
 
 **Clone and run for a quick way to see the Website App in action.**
 
