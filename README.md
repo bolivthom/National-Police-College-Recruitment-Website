@@ -6,7 +6,7 @@ A Website built in Flask for applicants applying to the National Police College
 
 ## To Use
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Python](https://www.python.org/downloads/) installed on your computer. From your command line:
+To clone and run this repository you'll need [Git](https://git-scm.com) and [Python 3](https://www.python.org/downloads/) installed on your computer. From your command line:
 
 ```bash
 # Clone this repository
@@ -15,13 +15,16 @@ git clone https://github.com/bolivthom/National-Police-College-Recruitment-Websi
 # Go into the repository
 cd National-Police-College-Recruitment-Website
 
-# Setup a virtual environment
-python -m venv venv
-or
-python3 -m venv venv 
+# Install the virtualenv package
+pip install virtualenv
+
+# Create the virtual environment
+py -m venv venv 
 
 # Activate virtual environment
 source venv/bin/activate
+or
+.\venv\Scripts\activate (if using Windows)
 
 # Install dependencies
 pip install -r requirements.txt
