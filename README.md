@@ -1,6 +1,6 @@
 # National Police College of Jamaica Recruitment Website
 
-**Clone and run for a quick way to see the Website App in action.**
+**Clone and run for a quick way to see the Website in action.**
 
 A Website built in Flask for applicants applying to the National Police College
 
