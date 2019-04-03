@@ -19,11 +19,15 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/about/')
-def about():
-    """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+@app.route('/login/')
+def login():
+    """Render the website's login page."""
+    return render_template('login.html')
 
+@app.route('/sign-up/')
+def signUp():
+    """Render the website's login page."""
+    return render_template('sign-up.html')
 
 ###
 # The functions below should be applicable to all Flask apps.

@@ -1,4 +1,4 @@
-# National Police College Recruitment Website
+# National Police College of Jamaica Recruitment Website
 
 **Clone and run for a quick way to see the Website App in action.**
 
@@ -10,7 +10,7 @@ To clone and run this repository you'll need [Git](https://git-scm.com) and [Pyt
 
 ```bash
 # Clone this repository
-git clone https://github.com/bolivthom/National-Police-College-Recruitment-Website
+git clone git@github.com:bolivthom/National-Police-College-of-Jamaica-Recruitment-Website.git
 
 # Go into the repository
 cd National-Police-College-Recruitment-Website

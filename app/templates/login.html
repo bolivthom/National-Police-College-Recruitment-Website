@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<!-- Login Title -->
+<h1 class="uk-position-relative uk-position-medium uk-position-top-center ">Login</h1>
+
+<div class="uk-position-center">
+    <!-- Login Form-->
+    <form>
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <input class="uk-input uk-width-medium" type="text">
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <input class="uk-input uk-width-medium" type="password">
+            </div>
+        </div>
+    </form>
+    
+    <!-- Submit Button -->
+    <button class="uk-button uk-button-primary uk-width-medium">Login</button>
+    
+    <!-- Sign Up link -->
+    <div class="uk-position-bottom-center uk-position-relative">
+    <p>Dont Have an account?<a href="{{ url_for('signUp') }}"> Sign Up</a></p>
+    </div>
+
+</div>
+{% endblock %}
