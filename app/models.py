@@ -1,0 +1,60 @@
+from . import db
+from werkzeug.security import generate_password_hash
+from flask_admin.contrib.sqla import ModelView
+
+# User Model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(80))
+    last_name = db.Column(db.String(80))
+    email = db.Column(db.String(80), unique=True)
+    password = db.Column(db.String(255), unique=True)
+
+# Admin Model
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(80))
+    last_name = db.Column(db.String(80))
+    email = db.Column(db.String(80), unique=True)
+    password = db.Column(db.String(255), unique=True)
+
+
+admin.add_view(ModelView(Admin, db.session))
+
+admin = Admin(app, name='admin-page', template_mode='uikit')
+admin.add_view(ModelView(Admin, db.session))
+
+
+class AdminModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('login', next=request.url))
+
+
+def __init__(self, first_name, last_name, email, password):
+    self.first_name = first_name
+    self.last_name = last_name
+    self.email = email
+    self.password = generate_password_hash(password, method='pbkdf2:sha256')
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.id)  # python 2 support
+        except NameError:
+            return str(self.id)  # python 3 support
+
+    def __repr__(self):
+        return '<User %r>' % (self.email)

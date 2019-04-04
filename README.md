@@ -6,7 +6,7 @@ A Website built in Flask for applicants applying to the National Police College
 
 ## To Use
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Python 3](https://www.python.org/downloads/) installed on your computer. From your command line:
+To clone and run this repository you'll need [Git](https://git-scm.com), [Python 3](https://www.python.org/downloads/) and [Mysql](https://www.mysql.com/downloads/) installed on your computer. From your command line:
 
 ```bash
 # Clone this repository

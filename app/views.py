@@ -7,6 +7,14 @@ This file creates your application.
 
 from app import app
 from flask import render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
+from app import app, db, login_manager
+from flask import render_template, request, redirect, url_for, flash, session
+from flask_login import login_user, logout_user, current_user, login_required
+from app.forms import LoginForm
+from app.models import UserProfile
+from werkzeug.security import check_password_hash
+
 
 
 ###
@@ -21,14 +29,48 @@ def home():
 
 @app.route('/login/')
 def login():
-    """Render the website's login page."""
-    return render_template('login.html')
+   form = LoginForm()
+    if request.method == "POST" and form.validate_on_submit():
+        if form.email.data:
+            email = form.email.data
+            password = form.password.data
+            user = UserProfile.query.filter_by(email=email).first()
+            if user is not None and check_password_hash(user.password, password):
+                login_user(user)
+                flash('Logged in successfully.', 'success')
+                return redirect(url_for("secure_page"))
+        else:
+            flash('Username or Password is incorrect.', 'danger')
+    return render_template("login.html", form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('You were logged out', 'success')
+    return redirect(url_for('home'))
+
 
 @app.route('/sign-up/')
 def signUp():
     """Render the website's login page."""
     return render_template('sign-up.html')
 
+@app.route('/user/<int:userid>')
+@login_required
+def user(userid):
+    user = Profile.query.filter_by(id=userid).first()
+    return render_template('user.html')
+
+# user_loader callback. This callback is used to reload the user object from
+# the user ID stored in the session
+@login_manager.user_loader
+def load_user(id):
+    return UserProfile.query.get(int(id))
+
+
+def init_login():
+    login_manager = login.LoginManager()
+    login_manager.init_app(app)
 ###
 # The functions below should be applicable to all Flask apps.
 ###
