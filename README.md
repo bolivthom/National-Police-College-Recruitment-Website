@@ -2,7 +2,7 @@
 
 **Clone and run for a quick way to see the Website in action.**
 
-A Website built in Flask for applicants applying to the National Police College
+A Prototype Website built in Flask for applicants applying to the National Police College
 
 ## To Use
 
@@ -28,6 +28,18 @@ or
 
 # Install dependencies
 pip install -r requirements.txt
+
+#To start the server from the command line:
+#Navigate to the MySQL ‘bin’ directory, such as by typing:
+cd "C:\Program Files\MySQL\MySQL Server 5.6\bin"
+
+#Then, type:
+mysqld
+
+#migrate the database models
+python flask-migrate.py db init 
+python flask-migrate.py db 
+migrate python flask-migrate.py db upgrade
 
 # Run the app
 python run.py

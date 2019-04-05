@@ -19,11 +19,9 @@ class Admin(db.Model):
     password = db.Column(db.String(255), unique=True)
 
 
-admin.add_view(ModelView(Admin, db.session))
-
 admin = Admin(app, name='admin-page', template_mode='uikit')
 admin.add_view(ModelView(Admin, db.session))
-
+admin.add_view(ModelView(Post, db.session))
 
 class AdminModelView(sqla.ModelView):
 

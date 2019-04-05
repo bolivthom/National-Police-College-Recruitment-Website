@@ -68,9 +68,6 @@ def load_user(id):
     return UserProfile.query.get(int(id))
 
 
-def init_login():
-    login_manager = login.LoginManager()
-    login_manager.init_app(app)
 ###
 # The functions below should be applicable to all Flask apps.
 ###

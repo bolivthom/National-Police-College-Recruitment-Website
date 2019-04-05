@@ -1,7 +1,14 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+
 {% extends 'admin/admin.html' %}
 
 {% block access_control %}
 {% if current_user.is_authenticated %}
-  <p>Hello world</p>
+  <p>Hello Admin</p>
 {% endif %}
+{% endblock %}
+
 {% endblock %}
