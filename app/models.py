@@ -55,6 +55,9 @@ class Applicant(db.Model):
 # applicant_role = Role(name='Applicant')
 # db.session.commit()
 
+
+
+############################################################################################
 # Create all database tables
     db.create_all()
 
@@ -64,6 +67,9 @@ class Applicant(db.Model):
             email='applicant@example.com',
             password=user_manager.hash_password('Password1'),
         )
+
+        user.roles.append(Role(name='Applicant'))
+
         db.session.add(user)
         db.session.commit()
 
@@ -74,9 +80,11 @@ class Applicant(db.Model):
             password=user_manager.hash_password('Password1'),
         )
         user.roles.append(Role(name='Admin'))
-        user.roles.append(Role(name='Applicant'))
+       
         db.session.add(user)
         db.session.commit()
+################################################################################################
+
 
 
 def __init__(self, first_name, last_name, email, password, role):

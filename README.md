@@ -29,12 +29,9 @@ or
 # Install dependencies
 pip install -r requirements.txt
 
-#To start the server from the command line:
-#Navigate to the MySQL ‘bin’ directory, such as by typing:
-cd "C:\Program Files\MySQL\MySQL Server 5.6\bin"
+#Connect to mysql (Ensure you have mysql server running)
 
-#Then, type:
-mysqld
+#Create Database and add the required info in your init.py file
 
 #migrate the database models
 python flask-migrate.py db init 
