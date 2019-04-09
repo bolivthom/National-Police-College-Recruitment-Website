@@ -8,30 +8,42 @@
 <h1 class="uk-position-relative uk-position-medium uk-position-top-center ">Sign Up</h1>
 
     <!-- Sign Up Form-->
-    <form>
+    <form method="POST" action="/contact">
         <div class="uk-margin">
             <div class="uk-inline">
-                <input class="uk-input uk-width-medium" type="text">
+                {{ form.first_name(class="uk-input uk-width-medium", placeholder="First Name") }}
             </div>
         </div>
 
         <div class="uk-margin">
             <div class="uk-inline">
-                <input class="uk-input uk-width-medium" type="text">
+                {{ form.last_name(class="uk-input uk-width-medium", placeholder="Last Name") }}
             </div>
         </div>
 
         <div class="uk-margin">
                 <div class="uk-inline">
-                    <input class="uk-input uk-width-medium" type="text">
+                    {{ form.email(class="uk-input uk-width-medium", placeholder="Email") }}
                 </div>
             </div>
         
             <div class="uk-margin">
                     <div class="uk-inline">
-                        <input class="uk-input uk-width-medium" type="text">
+                        {{ form.password(class="uk-input uk-width-medium", placeholder="Password") }}
                     </div>
+            </div>
+                
+            <div class="uk-margin">
+                    <div class="uk-inline">
+                        {{ form.confirm(class="uk-input uk-width-medium", placeholder="Confirm Password") }}
+                    </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-inline">
+                    {{ form.role(value="Applicant") }}
                 </div>
+        </div>
     </form>
     
     <!-- Submit Button -->

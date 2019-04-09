@@ -13,4 +13,10 @@ Flask-Migrate
 Flask-Script
 Flask-Login
 psycopg2
-flask_admin
+flask-admin
+Flask-User
+flask-sqlalchemy
+flask-script
+flask-migrate
+flask-login
+flask-user

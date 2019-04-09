@@ -8,16 +8,17 @@
     <h1 class="uk-position-relative uk-position-medium uk-position-top-center ">Login</h1>
 
     <!-- Login Form-->
-    <form>
+    <form method="POST" action="/login">
+            {{ form.csrf_token }}
         <div class="uk-margin">
-            <div class="uk-inline">
-                <input class="uk-input uk-width-medium" type="text">
+            <div class="uk-inline"> 
+                {{ form.email(class="uk-input uk-width-medium", placeholder="Email") }}
             </div>
         </div>
 
         <div class="uk-margin">
             <div class="uk-inline">
-                <input class="uk-input uk-width-medium" type="password">
+                {{ form.password(class="uk-input uk-width-medium", placeholder="Password") }}
             </div>
         </div>
     </form>

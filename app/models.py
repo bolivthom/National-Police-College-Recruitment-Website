@@ -3,56 +3,104 @@ from werkzeug.security import generate_password_hash
 from flask_admin.contrib.sqla import ModelView
 
 # User Model
-class User(db.Model):
+class User(db.Model, UserMixin)):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
-    email = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(255), unique=True)
+    email = db.Column(db.String(80), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
+    role = db.relationship('Role', secondary='user_role')
 
-# Admin Model
-class Admin(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(80))
-    last_name = db.Column(db.String(80))
-    email = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(255), unique=True)
+# Role Model
+class Role(db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+
+# Define the UserRoles association table
+class UserRole(db.Model):
+    __tablename__ = 'user_role'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+
+# Applicant Model
+class Applicant(db.Model): 
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))   
+    mothers_maiden_name = db.Column(db.String(80))
+    gender =  db.Column(db.String(80))
+    #dob
+    street1 =  db.Column(db.String(80))
+    street2 =  db.Column(db.String(80))
+    city =  db.Column(db.String(80))
+    country =  db.Column(db.String(80))
+    phone_number =  db.Column(db.String(80))
+    trn =  db.Column(db.String(80))
+    nis =  db.Column(db.String(80))
+    brn =  db.Column(db.String(80))
+    weight =  db.Column(db.String(80))
+    height =  db.Column(db.String(80))
+    place_of_birth =  db.Column(db.String(80))
+
+    # Setup Flask-User and specify the User data-model
+    user_manager = UserManager(app, db, User)
 
 
-admin = Admin(app, name='admin-page', template_mode='uikit')
-admin.add_view(ModelView(Admin, db.session))
-admin.add_view(ModelView(Post, db.session))
+#Admin Model
+#class Admin(db.Model):
+#    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
 
-class AdminModelView(sqla.ModelView):
+# Roles are defined by adding rows to the Role table with a specific Role.name value.
+# admin_role = Role(name='Admin')
+# applicant_role = Role(name='Applicant')
+# db.session.commit()
 
-    def is_accessible(self):
-        return login.current_user.is_authenticated
+# Create all database tables
+    db.create_all()
 
-    def inaccessible_callback(self, name, **kwargs):
-        # redirect to login page if user doesn't have access
-        return redirect(url_for('login', next=request.url))
+    # Create 'member@example.com' user with no roles
+    if not User.query.filter(User.email == 'applicant@example.com').first():
+        user = User(
+            email='applicant@example.com',
+            password=user_manager.hash_password('Password1'),
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
+    if not User.query.filter(User.email == 'admin@example.com').first():
+        user = User(
+            email='admin@example.com',
+            password=user_manager.hash_password('Password1'),
+        )
+        user.roles.append(Role(name='Admin'))
+        user.roles.append(Role(name='Applicant'))
+        db.session.add(user)
+        db.session.commit()
 
 
-def __init__(self, first_name, last_name, email, password):
-    self.first_name = first_name
-    self.last_name = last_name
-    self.email = email
-    self.password = generate_password_hash(password, method='pbkdf2:sha256')
+def __init__(self, first_name, last_name, email, password, role):
+     self.first_name = first_name
+     self.last_name = last_name
+     self.email = email
+     self.password = generate_password_hash(password, method='pbkdf2:sha256'
+     self.role = role)
 
-    def is_authenticated(self):
-        return True
+     def is_authenticated(self):
+         return True
 
-    def is_active(self):
-        return True
+     def is_active(self):
+         return True
 
-    def is_anonymous(self):
-        return False
+     def is_anonymous(self):
+         return False
 
-    def get_id(self):
-        try:
-            return unicode(self.id)  # python 2 support
-        except NameError:
-            return str(self.id)  # python 3 support
+     def get_id(self):
+         try:
+             return unicode(self.id)  # python 2 support
+         except NameError:
+             return str(self.id)  # python 3 support
 
-    def __repr__(self):
-        return '<User %r>' % (self.email)
+     def __repr__(self):
+         return '<User %r>' % (self.email)
+

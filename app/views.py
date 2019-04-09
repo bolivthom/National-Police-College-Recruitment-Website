@@ -10,9 +10,10 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, session
-from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
-from app.models import UserProfile
+from flask_login import login_user, logout_user
+from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
+from app.forms import LoginForm, SignUpForm
+#from app.models import User
 from werkzeug.security import check_password_hash
 
 
@@ -29,19 +30,20 @@ def home():
 
 @app.route('/login/')
 def login():
-   form = LoginForm()
+    form = LoginForm()
     if request.method == "POST" and form.validate_on_submit():
         if form.email.data:
             email = form.email.data
             password = form.password.data
-            user = UserProfile.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
             if user is not None and check_password_hash(user.password, password):
                 login_user(user)
                 flash('Logged in successfully.', 'success')
-                return redirect(url_for("secure_page"))
+                return redirect(url_for("dashboard"))
         else:
             flash('Username or Password is incorrect.', 'danger')
     return render_template("login.html", form=form)
+
 
 @app.route('/logout')
 def logout():
@@ -52,20 +54,54 @@ def logout():
 
 @app.route('/sign-up/')
 def signUp():
+    form = SignUpForm()
+    if request.method == "POST" and form.validate_on_submit():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        password = form.password.data
+        confirm = form.confirm.data
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            db_session.add(User(first_name, last_name, email, password))
+            db.session.commit()
+            flash('Account created', 'success')
+            return redirect(url_for("user"))
+        else:
+            flash('User with that email address already exist.', 'danger')
     """Render the website's login page."""
-    return render_template('sign-up.html')
+    return render_template('sign-up.html', form=form)
 
-@app.route('/user/<int:userid>')
-@login_required
-def user(userid):
-    user = Profile.query.filter_by(id=userid).first()
-    return render_template('user.html')
+
+@app.route('/dashboard/<int:userid>')
+@roles_required('Admin', 'Applicant')   
+def dashboard():
+    user = User.query.filter_by(id=userid).first()
+    return render_template('dashboard.html', user=user)
+
+# @app.route('/applicant/dashboard/<int:userid>')
+#     @roles_required('Applicant')   
+#     def applicant_page():
+#         user = User.query.filter_by(id=userid).first()
+#         return render_template('admin.html', user=user)
+
+
+# @app.route('/user/<int:userid>')
+# @login_required
+# def user(userid, role):
+#     user = User.query.filter_by(id=userid).first()
+#     if user.role.name == 'Admin':
+#         return render_template('admin.html', user=user)
+#     elif user.role.name == 'Applicant':
+#         return render_template('user.html', user=user)
+#     return render_template('home.html')
 
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session
+
 @login_manager.user_loader
 def load_user(id):
-    return UserProfile.query.get(int(id))
+    return User.query.get(int(id))
 
 
 ###
