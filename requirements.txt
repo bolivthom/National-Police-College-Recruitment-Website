@@ -20,3 +20,5 @@ flask-script
 flask-migrate
 flask-login
 flask-user
+pymysql
+wtform-components

@@ -77,7 +77,11 @@ def signUp():
 @roles_required('Admin', 'Applicant')   
 def dashboard():
     user = User.query.filter_by(id=userid).first()
-    return render_template('dashboard.html', user=user)
+    roles = User.query.filter_by(roles=roles).first()
+    if roles == 'Admin':
+        return render_template('admin.html', user=user)
+    else:
+        return render_template('applicant.html', user=user)
 
 # @app.route('/applicant/dashboard/<int:userid>')
 #     @roles_required('Applicant')   

@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, validators, SelectField, HiddenField
 from wtforms.validators import InputRequired
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Login Form
 class LoginForm(FlaskForm):
@@ -33,5 +34,17 @@ class ApplicationForm(FlaskForm):
     height = StringField('Height', validators=[InputRequired()])
     place_of_birth = StringField('Place of Birth', validators=[InputRequired()])
 
+# Supporting Docs
+class UploadSupportingDocs(FlaskForm):
+    birth_certificate = FileField('Upload Field', validators=[FileRequired(), FileAllowed(['txt', 'pdf', 'png', 'jpg', 'jpeg'])]) 
+    passport = FileField('Upload Field', validators=[FileRequired(), FileAllowed(['txt', 'pdf', 'png', 'jpg', 'jpeg'])])
+    national_id = FileField('Upload Field', validators=[FileRequired(), FileAllowed(['txt', 'pdf', 'png', 'jpg', 'jpeg'])])
+    trn = FileField('Upload Field', validators=[FileRequired(), FileAllowed(['txt', 'pdf', 'png', 'jpg', 'jpeg'])])
+    nis = FileField('Upload Field', validators=[FileRequired(), FileAllowed(['txt', 'pdf', 'png', 'jpg', 'jpeg'])])
 
-
+# Applicant Tests
+class UploadApplicantTest(FlaskForm):
+    polygraph = SelectField('Status', choices=[('Pass', 'P'), ('Fail', 'F')])
+    police_record = SelectField('Status', choices=[('Pass', 'P'), ('Fail', 'F')])
+    physical = SelectField('Status', choices=[('Pass', 'P'), ('Fail', 'F')])
+    written = SelectField('Status', choices=[('Pass', 'P'), ('Fail', 'F')])

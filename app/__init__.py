@@ -6,7 +6,7 @@ from flask_admin import Admin
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "123456790"
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/npcj"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:@localhost/npcj"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True # added just to suppress a warning
 
 db = SQLAlchemy(app)

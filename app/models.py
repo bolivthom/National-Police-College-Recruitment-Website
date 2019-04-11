@@ -56,37 +56,6 @@ class Applicant(db.Model):
 # db.session.commit()
 
 
-
-############################################################################################
-# Create all database tables
-    db.create_all()
-
-    # Create 'member@example.com' user with no roles
-    if not User.query.filter(User.email == 'applicant@example.com').first():
-        user = User(
-            email='applicant@example.com',
-            password=user_manager.hash_password('Password1'),
-        )
-
-        user.roles.append(Role(name='Applicant'))
-
-        db.session.add(user)
-        db.session.commit()
-
-    # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
-    if not User.query.filter(User.email == 'admin@example.com').first():
-        user = User(
-            email='admin@example.com',
-            password=user_manager.hash_password('Password1'),
-        )
-        user.roles.append(Role(name='Admin'))
-       
-        db.session.add(user)
-        db.session.commit()
-################################################################################################
-
-
-
 def __init__(self, first_name, last_name, email, password, role):
      self.first_name = first_name
      self.last_name = last_name
