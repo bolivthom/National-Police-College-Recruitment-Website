@@ -66,7 +66,7 @@ class Applicant(db.Model):
     phone_number =  db.Column(db.String(80))
     trn =  db.Column(db.String(80))
     nis =  db.Column(db.String(80))
-    brn =  db.Column(db.String(80))
+    #brn =  db.Column(db.String(80))
     weight =  db.Column(db.String(80))
     height =  db.Column(db.String(80))
     place_of_birth =  db.Column(db.String(80))

@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, session
 from app.forms import LoginForm, SignUpForm, ApplicationForm, UploadSupportingDocs
-from app.models import User, Role
+from app.models import User, Role, SupportingDocs
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, login_required
 
@@ -137,15 +137,21 @@ def applicant_application():
         city = form.city.data
         parish = form.parish.data
         country = form.county.data
-        birth_certificate = uploadForm.birth_certificate.data
-        national_id = uploadForm.national_id.data
-        trn = uploadForm.trn.data
-        nis = uploadForm.nis.data
+        birth_certificateDoc = uploadForm.birth_certificate.data
+        national_idDoc = uploadForm.national_id.data
+        trnDoc = uploadForm.trn.data
+        nisDoc = uploadForm.nis.data
+
         User.query.filter_by(id=userid).update(dict(first_name=first_name, last_name=last_name))
+        
         Applicant.query.filter_by(userid=userid).update(dict(mothers_maiden_name=mothers_maiden_name, 
         gender=gender, height=height, weight=weight, place_of_birth=place_of_birth,phone_number=phone_number, trn=trn, nis=nis))
+        
+        supportingDocs = SupportingDocs(userid=userid, national_id=national_idDoc, birth_certificate=birth_certificateDoc, trn=trnDoc, nis=nisDoc)
+        
+        db.session.add(supportingDocs)
         db.session.commit()
-        return render_template('applicant_dashboard.html', form=form)
+        return render_template('applicant_dashboard.html', form=form, uploadForm=uploadForm)
     else:
         return render_template('applicant_application.html', form=form, uploadForm=uploadForm)
 
