@@ -130,18 +130,30 @@ def applicant_application():
         phone_number = form.phone_number.data
         trn = form.trn.data
         nis = form.nis.data
+        height = form.height.data
+        weight = form.height.data
+        street1 = form.street1.data
+        street2 = form.street2.data
+        city = form.city.data
+        parish = form.parish.data
+        country = form.county.data
         birth_certificate = uploadForm.birth_certificate.data
         national_id = uploadForm.national_id.data
         trn = uploadForm.trn.data
         nis = uploadForm.nis.data
         User.query.filter_by(id=userid).update(dict(first_name=first_name, last_name=last_name))
         Applicant.query.filter_by(userid=userid).update(dict(mothers_maiden_name=mothers_maiden_name, 
-        gender=gender, place_of_birth=place_of_birth,phone_number=phone_number, trn=trn, nis=nis))
+        gender=gender, height=height, weight=weight, place_of_birth=place_of_birth,phone_number=phone_number, trn=trn, nis=nis))
         db.session.commit()
         return render_template('applicant_dashboard.html', form=form)
     else:
         return render_template('applicant_application.html', form=form, uploadForm=uploadForm)
 
+
+@app.route('/applicant/dashboard')
+@login_required
+def applicant_dashboard():
+    return render_template('applicant_dashboard.html')
 
 
 @app.route('/admin')

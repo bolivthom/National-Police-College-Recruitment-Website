@@ -1,21 +1,20 @@
 <nav class="uk-navbar-container" uk-navbar>
-  <div class="uk-navbar-left">
-      <ul class="uk-navbar-nav">
-          <li class=" uk-margin-medium-left uk-active"><a href="{{ url_for('home') }}">National Police College of Jamaica</a></li>
-      </ul>
-  </div>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li class=" uk-margin-medium-left uk-active"><a href="{{ url_for('home') }}">National Police College of Jamaica</a></li>
+        </ul>
+    </div>
 
   <!-- Login and Sign Up -->
-  <div class="uk-navbar-right">
-    <ul class="uk-margin-medium-right uk-navbar-nav">
-        {% if not session['logged_in'] %}
-        <li><a href="{{ url_for('login') }}">Login</a></li>
-        <li><a href="{{ url_for('signUp') }}">Apply Now!</a></li>
-        {% else %}
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-        {% endif %}
-    </ul>
-
-</div>
+    <div class="uk-navbar-right">
+        <ul class="uk-margin-medium-right uk-navbar-nav">
+            {% if not session['logged_in'] %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('signUp') }}">Apply Now!</a></li>
+            {% else %}
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% endif %}
+        </ul>
+    </div>
 </nav>
 

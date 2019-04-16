@@ -11,9 +11,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     roles = db.relationship('Role', secondary='user_role')
 
-    def __init__(self, first_name, last_name, email, password):
-        self.first_name = first_name
-        self.last_name = last_name
+    def __init__(self, email, password):
         self.email = email
         self.password = generate_password_hash(password, method='pbkdf2:sha256')
     

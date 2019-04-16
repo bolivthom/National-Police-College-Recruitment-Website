@@ -7,6 +7,7 @@
     <!-- Sign Up Title -->
 <h1 class="uk-position-relative uk-position-medium uk-position-top-center ">Sign Up</h1>
 
+
     <!-- Sign Up Form-->
     <form method="POST" enctype="multipart/form-data" action="{{ url_for('signUp')}}">
         {{ form.csrf_token }}
@@ -15,19 +16,18 @@
                     {{ form.email(class="uk-input uk-width-medium", placeholder="Email") }}
                 </div>
             </div>
-        
             <div class="uk-margin">
                     <div class="uk-inline">
                         {{ form.password(class="uk-input uk-width-medium", placeholder="Password") }}
                     </div>
             </div>
-                
             <div class="uk-margin">
                     <div class="uk-inline">
                         {{ form.confirm(class="uk-input uk-width-medium", placeholder="Confirm Password") }}
                     </div>
             </div>
 
+            
             <!-- Submit Button -->
             {{ form.submit(class="uk-button uk-button-primary uk-width-medium") }}
             

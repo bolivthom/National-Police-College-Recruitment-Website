@@ -1,0 +1,24 @@
+<nav class="uk-navbar-container" uk-navbar>
+        <div class="uk-navbar-left">
+            <ul class="uk-navbar-nav">
+                <li class=" uk-margin-medium-left uk-active"><a href="{{ url_for('home') }}">NPCJ</a></li>
+            </ul>
+        </div>
+
+
+        <div class="uk-navbar-center">
+            <ul class=" uk-navbar-nav">
+                <li><a href="{{ url_for('applicant_dashboard') }}">Dashboard</a></li>
+                <li><a href="">Application</a></li>
+                <li><a href="">Test Results</a></li>
+          </ul>
+        </div>
+
+      
+        <!-- Login and Sign Up -->
+        <div class="uk-navbar-right">
+          <ul class="uk-margin-medium-right uk-navbar-nav">
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          </ul>
+      </div>
+      </nav>

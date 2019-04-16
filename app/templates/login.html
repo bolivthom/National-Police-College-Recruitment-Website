@@ -7,6 +7,7 @@
     <!-- Login Title -->
     <h1 class="uk-position-relative uk-position-medium uk-position-top-center ">Login</h1>
 
+
     <!-- Login Form-->
     <form method="POST" action="/login">
             {{ form.csrf_token }}
@@ -15,16 +16,17 @@
                 {{ form.email(class="uk-input uk-width-medium", placeholder="Email") }}
             </div>
         </div>
-
         <div class="uk-margin">
             <div class="uk-inline">
                 {{ form.password(class="uk-input uk-width-medium", placeholder="Password") }}
             </div>
         </div>
 
+
          <!-- Submit Button -->
         {{ form.submit(class="uk-button uk-button-primary uk-width-medium") }}
     </form>
+    
     
     <!-- Sign Up link -->
     <div class="uk-position-bottom-center uk-position-relative">
