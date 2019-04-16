@@ -10,13 +10,43 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, session
-from flask_login import login_user, logout_user
-from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
-from app.forms import LoginForm, SignUpForm
-#from app.models import User
+from app.forms import LoginForm, SignUpForm, ApplicationForm, UploadSupportingDocs
+from app.models import User, Role
 from werkzeug.security import check_password_hash
+from flask_login import login_user, logout_user, login_required
+
+"""
+1. Is user logged out?
+Yes - Show them only login or signup pages
+No - Never show the above pages, redirect them to appropriate dashboard by default
+
+I think is_authenticated or some method in the flask_login lob  help with this
+could
+2. Is user admin?
+Yes - Enforce step 1 and that's it
+No 
+ - At this point, the user is definitely a particiapant
+ - Prevent them from seeing any admin specific role
+
+3. Is user participant?
+Yes - Not much to do at this point, steps 1 & 2 take care of any pages they shouldn't see
+No - N/A
+
+"""
 
 
+def is_admin(user):
+    for role in user.roles:
+        if role.name == 'Admin':
+            return True
+    return False
+
+
+def is_applicant(user):
+    for role in user.roles:
+        if role.name == 'Applicant':
+            return True
+    return False
 
 ###
 # Routing for your application.
@@ -28,7 +58,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/login/')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if request.method == "POST" and form.validate_on_submit():
@@ -38,8 +68,16 @@ def login():
             user = User.query.filter_by(email=email).first()
             if user is not None and check_password_hash(user.password, password):
                 login_user(user)
+                session['logged_in'] = True
                 flash('Logged in successfully.', 'success')
-                return redirect(url_for("dashboard"))
+                isAdmin = is_admin(user)
+
+                if isAdmin:
+                    redirect_url = url_for('admin_dashboard')
+                else:
+                    redirect_url = url_for('applicant_application')
+
+                return redirect(redirect_url)
         else:
             flash('Username or Password is incorrect.', 'danger')
     return render_template("login.html", form=form)
@@ -48,40 +86,75 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    session['logged_in'] = False
     flash('You were logged out', 'success')
     return redirect(url_for('home'))
 
 
-@app.route('/sign-up/')
+@app.route('/sign-up', methods=['GET', 'POST'])
 def signUp():
-    form = SignUpForm()
-    if request.method == "POST" and form.validate_on_submit():
-        first_name = form.first_name.data
-        last_name = form.last_name.data
+    form = SignUpForm(request.form)
+    # print('request:', request.form, request)
+    # print('form.validate_on_submit():', form.validate(), form.errors)
+    if request.method == "POST" and form.validate():
         email = form.email.data
         password = form.password.data
         confirm = form.confirm.data
         user = User.query.filter_by(email=email).first()
-        if user is not None:
-            db_session.add(User(first_name, last_name, email, password))
+        #print('user:', user)
+        if user is None:
+            user = User(email, password)
+            applicant_role = Role.query.filter_by(name='Applicant').first()
+            user.roles = [applicant_role,]
+            db.session.add(user)
             db.session.commit()
             flash('Account created', 'success')
-            return redirect(url_for("user"))
+            return redirect(url_for("login"))
         else:
-            flash('User with that email address already exist.', 'danger')
-    """Render the website's login page."""
+            flash('User with that email address already exist.', 'danger')   
     return render_template('sign-up.html', form=form)
 
 
-@app.route('/dashboard/<int:userid>')
-@roles_required('Admin', 'Applicant')   
-def dashboard():
-    user = User.query.filter_by(id=userid).first()
-    roles = User.query.filter_by(roles=roles).first()
-    if roles == 'Admin':
-        return render_template('admin.html', user=user)
+
+@app.route('/application')
+@login_required
+def applicant_application():
+    form = ApplicationForm(request.form)
+    uploadForm = UploadSupportingDocs(request.form)
+    if request.method == "POST" and form.validate():
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        mothers_maiden_name = form.mothers_maiden_name.data
+        gender = form.gender.data
+        place_of_birth = form.place_of_birth.data
+        phone_number = form.phone_number.data
+        trn = form.trn.data
+        nis = form.nis.data
+        birth_certificate = uploadForm.birth_certificate.data
+        national_id = uploadForm.national_id.data
+        trn = uploadForm.trn.data
+        nis = uploadForm.nis.data
+        User.query.filter_by(id=userid).update(dict(first_name=first_name, last_name=last_name))
+        Applicant.query.filter_by(userid=userid).update(dict(mothers_maiden_name=mothers_maiden_name, 
+        gender=gender, place_of_birth=place_of_birth,phone_number=phone_number, trn=trn, nis=nis))
+        db.session.commit()
+        return render_template('applicant_dashboard.html', form=form)
     else:
-        return render_template('applicant.html', user=user)
+        return render_template('applicant_application.html', form=form, uploadForm=uploadForm)
+
+
+
+@app.route('/admin')
+@login_required
+#@roles_required('Admin')   
+def admin_dashboard():
+    #user = User.query.filter_by(id=userid).first()
+    #isAdmin = is_admin(user)
+    #if isAdmin:
+    return render_template('admin.html')
+    
+
+
 
 # @app.route('/applicant/dashboard/<int:userid>')
 #     @roles_required('Applicant')   

@@ -11,14 +11,9 @@ Flask-WTF
 Flask-SQLAlchemy
 Flask-Migrate
 Flask-Script
-Flask-Login
 psycopg2
-flask-admin
-Flask-User
 flask-sqlalchemy
 flask-script
 flask-migrate
-flask-login
-flask-user
 pymysql
 wtform-components

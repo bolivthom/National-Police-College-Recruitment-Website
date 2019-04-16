@@ -1,0 +1,139 @@
+{% extends "applicant_base.html" %}
+
+{% block main %}
+<div class="uk-margin-large-left uk-margin-top ">
+<div class="uk-margin-large-bottom">
+<h2>Registration Form</h2>
+<p style="font-size: 15px">Please fill in your registration form</p>
+</div>
+
+    <div class="uk-child-width-1-2@s" uk-grid>
+            <div>
+                <div uk-grid>
+                    <div class="">
+                        <ul class="uk-tab-right" uk-tab="connect: #component-tab-left; animation: uk-animation-fade">
+                            <li class="uk-margin-top"><a href="#">User Profile</a></li>
+                            <li class="uk-margin-large-top"><a href="#">Residential Address</a></li>
+                            <li class="uk-margin-large-top"><a href="#">Supporting Documents</a></li>
+                        </ul>
+                    </div>
+                    <div class="uk-width-expand@m uk-margin-large-left">
+                        <ul id="component-tab-left" class="uk-switcher">
+                
+                            <li>
+                                    <form >
+                                            <fieldset class="uk-fieldset">
+                                        
+                                                <legend class="uk-legend">User Profile</legend>
+                                                
+                                                <div class="uk-column-1-2">
+
+                                                <div class="uk-margin">
+                                                        {{ form.first_name(class="uk-input uk-width-medium", placeholder="First Name") }}
+                                                </div>
+                                                <div class="uk-margin">
+                                                        {{ form.mothers_maiden_name(class="uk-input uk-width-medium", placeholder="Mother's Maiden Name") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.place_of_birth(class="uk-input uk-width-medium", placeholder="Place of Birth") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.trn(class="uk-input uk-width-medium", placeholder="TRN") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.last_name(class="uk-input uk-width-medium", placeholder="Last Name") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.gender(class="uk-input uk-width-medium", placeholder="Gender") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.phone_number(class="uk-input uk-width-medium", placeholder="Phone Number") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.nis(class="uk-input uk-width-medium", placeholder="NIS") }}
+                                                </div>
+                                            </div>   
+                                            </fieldset>
+                                        </form>
+                            </li>
+                            <!-- Residential Address -->
+                            <li>
+                                    <form>
+                                            <fieldset class="uk-fieldset">
+                                        
+                                                <legend class="uk-legend">Residential Address</legend>
+                                                
+                                                <div class="uk-column-1-2">
+
+                                                <div class="uk-margin">
+                                                        {{ form.street1(class="uk-input uk-width-medium", placeholder="Street 1") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                    
+                                                        {{ form.city(class="uk-input uk-width-medium", placeholder="City") }}
+                                                </div>
+                                                <div class="uk-margin ">
+                                                        {{ form.country(class="uk-input uk-width-medium", placeholder="Country") }}
+                                                </div>
+                                                    <div class="uk-margin ">
+                                                            {{ form.street2(class="uk-input uk-width-medium", placeholder="Street2") }}
+                                                    </div>
+                                                    <div class="uk-margin">
+                                                            {{ form.parish(class="uk-input uk-width-medium", placeholder="Parish") }}
+                                                        </div>
+                                                    
+                                                </div>
+                                            
+                                            
+                                            </fieldset>
+                                        </form>
+                            </li>
+                            <!-- Supporting Docs Form -->
+                            <li>
+                                    <form>
+                                            <fieldset class="uk-fieldset">
+                                        
+                                                <legend class="uk-legend">Supporting Documents</legend>
+                                                
+                                                <div class="uk-column-1-2">
+
+                                                        <div class="uk-margin" uk-margin>
+                                                                <div uk-form-custom="target: true">
+                                                                    <input type="file">
+                                                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="Birth Certificate" disabled>
+                                                                </div>
+                                                            </div>
+                                        
+                                                            <div class="uk-margin" uk-margin>
+                                                                    <div uk-form-custom="target: true">
+                                                                        <input type="file">
+                                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="National ID" disabled>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="uk-margin" uk-margin>
+                                                                        <div uk-form-custom="target: true">
+                                                                            <input type="file">
+                                                                            <input class="uk-input uk-form-width-medium" type="text" placeholder="TRN" disabled>
+                                                                        </div>
+                                                                    </div>
+                                            
+                                                                    <div class="uk-margin" uk-margin>
+                                                                            <div uk-form-custom="target: true">
+                                                                                <input type="file">
+                                                                                <input class="uk-input uk-form-width-medium" type="text" placeholder="NIS" disabled>
+                                                                            </div>
+                                                                            
+                                                                        </div>
+                                                </div>
+                                                <button class="uk-button uk-button-primary">Submit</button>
+                                            
+                                            </fieldset>
+                                        </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

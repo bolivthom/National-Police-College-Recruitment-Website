@@ -8,19 +8,8 @@
 <h1 class="uk-position-relative uk-position-medium uk-position-top-center ">Sign Up</h1>
 
     <!-- Sign Up Form-->
-    <form method="POST" action="/contact">
-        <div class="uk-margin">
-            <div class="uk-inline">
-                {{ form.first_name(class="uk-input uk-width-medium", placeholder="First Name") }}
-            </div>
-        </div>
-
-        <div class="uk-margin">
-            <div class="uk-inline">
-                {{ form.last_name(class="uk-input uk-width-medium", placeholder="Last Name") }}
-            </div>
-        </div>
-
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('signUp')}}">
+        {{ form.csrf_token }}
         <div class="uk-margin">
                 <div class="uk-inline">
                     {{ form.email(class="uk-input uk-width-medium", placeholder="Email") }}
@@ -39,15 +28,12 @@
                     </div>
             </div>
 
-            <div class="uk-margin">
-                <div class="uk-inline">
-                    {{ form.role(value="Applicant") }}
-                </div>
-        </div>
+            <!-- Submit Button -->
+            {{ form.submit(class="uk-button uk-button-primary uk-width-medium") }}
+            
     </form>
     
-    <!-- Submit Button -->
-    <button class="uk-button uk-button-primary uk-width-medium">Submit</button>
+    
     
 
 {% endblock %}

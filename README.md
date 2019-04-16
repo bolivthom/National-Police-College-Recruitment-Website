@@ -35,8 +35,8 @@ pip install -r requirements.txt
 
 #migrate the database models
 python flask-migrate.py db init 
-python flask-migrate.py db 
-migrate python flask-migrate.py db upgrade
+python flask-migrate.py db migrate
+python flask-migrate.py db upgrade
 
 # Run the app
 python run.py
