@@ -29,8 +29,8 @@
 
 
                             <!-- User Profile -->
-                            <li>
-                                <form >
+                            <li class="uk-margin-top">
+                                <form action="/application" method="post" enctype="multipart/form-data" >
                                     <fieldset class="uk-fieldset">
                                         <legend class="uk-legend uk-margin-large-bottom">User Profile</legend>        
                                             <div class="uk-column-1-2">
@@ -65,8 +65,8 @@
                             
 
                              <!-- Residential Address -->
-                             <li>
-                                    <form>
+                             <li class="uk-margin-top">
+                                    <form action="/application" method="post" enctype="multipart/form-data" >
                                         <fieldset class="uk-fieldset">   
                                             <legend class="uk-legend uk-margin-large-bottom">Biometrics</legend>
                                                 <div class="uk-column-1-2">
@@ -82,8 +82,8 @@
                                 </li>
 
                             <!-- Residential Address -->
-                            <li>
-                                <form>
+                            <li class="uk-margin-top">
+                                <form action="/application" method="post" enctype="multipart/form-data" >
                                     <fieldset class="uk-fieldset">   
                                         <legend class="uk-legend uk-margin-large-bottom">Residential Address</legend>
                                             <div class="uk-column-1-2">
@@ -97,7 +97,7 @@
                                                         {{ form.country(class="uk-input uk-width-medium", placeholder="Country") }}
                                                 </div>
                                                 <div class="uk-margin ">
-                                                        {{ form.street2(class="uk-input uk-width-medium", placeholder="Street2") }}
+                                                        {{ form.street2(class="uk-input uk-width-medium", placeholder="Street 2") }}
                                                 </div>
                                                 <div class="uk-margin">
                                                     {{ form.parish(class="uk-input uk-width-medium", placeholder="Parish") }}
@@ -109,37 +109,37 @@
 
 
                             <!-- Supporting Docs Form -->
-                            <li>
-                                <form>
+                            <li class="uk-margin-top">
+                                <form action="/application" method="post" enctype="multipart/form-data" >
                                     <fieldset class="uk-fieldset">    
                                         <legend class="uk-legend uk-margin-large-bottom">Supporting Documents</legend>        
                                             <div class="uk-column-1-2">
                                                 <div class="uk-margin" uk-margin>
                                                     <div uk-form-custom="target: true">
                                                         <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="Birth Certificate" disabled>
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="Birth Certificate" name="birth_certificate" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="uk-margin" uk-margin>
                                                     <div uk-form-custom="target: true">
                                                         <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="National ID" disabled>
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="National ID" name="national_id" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="uk-margin" uk-margin>
                                                     <div uk-form-custom="target: true">
                                                         <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="TRN" disabled>
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="TRN" name="trn" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="uk-margin" uk-margin>
                                                     <div uk-form-custom="target: true">
                                                         <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="NIS" disabled>
+                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="NIS" name="nis" disabled>
                                                     </div>
                                                 </div>
                                             </div>
-                                    <button class="uk-button uk-button-primary">Submit</button>
+                                    <button class="uk-button uk-button-primary" type="submit">Submit</button>
                                     </fieldset>
                                 </form>
                             </li>

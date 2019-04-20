@@ -5,10 +5,11 @@
         </ul>
     </div>
 
+
   <!-- Login and Sign Up -->
     <div class="uk-navbar-right">
         <ul class="uk-margin-medium-right uk-navbar-nav">
-            {% if not session['logged_in'] %}
+            {% if not session.logged_in %}
             <li><a href="{{ url_for('login') }}">Login</a></li>
             <li><a href="{{ url_for('signUp') }}">Apply Now!</a></li>
             {% else %}

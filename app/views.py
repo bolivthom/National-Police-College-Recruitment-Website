@@ -71,13 +71,10 @@ def login():
                 session['logged_in'] = True
                 flash('Logged in successfully.', 'success')
                 isAdmin = is_admin(user)
-
                 if isAdmin:
                     redirect_url = url_for('admin_dashboard')
                 else:
                     redirect_url = url_for('applicant_application')
-
-                return redirect(redirect_url)
         else:
             flash('Username or Password is incorrect.', 'danger')
     return render_template("login.html", form=form)
@@ -94,14 +91,11 @@ def logout():
 @app.route('/sign-up', methods=['GET', 'POST'])
 def signUp():
     form = SignUpForm(request.form)
-    # print('request:', request.form, request)
-    # print('form.validate_on_submit():', form.validate(), form.errors)
     if request.method == "POST" and form.validate():
         email = form.email.data
         password = form.password.data
         confirm = form.confirm.data
         user = User.query.filter_by(email=email).first()
-        #print('user:', user)
         if user is None:
             user = User(email, password)
             applicant_role = Role.query.filter_by(name='Applicant').first()
@@ -116,12 +110,12 @@ def signUp():
 
 
 
-@app.route('/application')
+@app.route('/application', methods=['GET', 'POST'])
 @login_required
 def applicant_application():
     form = ApplicationForm(request.form)
     uploadForm = UploadSupportingDocs(request.form)
-    if request.method == "POST" and form.validate():
+    if request.method == "POST" and form.validate_on_submit():
         first_name = form.first_name.data
         last_name = form.last_name.data
         mothers_maiden_name = form.mothers_maiden_name.data
@@ -161,15 +155,25 @@ def applicant_application():
 def applicant_dashboard():
     return render_template('applicant_dashboard.html')
 
+@app.route('/applicant/application')
+@login_required
+def applicantApplication_view():
+    return render_template('applicantApplication_View.html')
+
+@app.route('/applicant/test-results')
+@login_required
+def applicantTestResults_view():
+    return render_template('applicantTestResults_View.html')
+
+
 
 @app.route('/admin')
-@login_required
-#@roles_required('Admin')   
+@login_required  
 def admin_dashboard():
     #user = User.query.filter_by(id=userid).first()
     #isAdmin = is_admin(user)
     #if isAdmin:
-    return render_template('admin.html')
+    return render_template('admin_dashboard.html')
     
 
 
