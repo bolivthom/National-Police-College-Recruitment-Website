@@ -6,18 +6,22 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
+from functools import wraps
 from app import app, db, login_manager
-from flask import render_template, request, redirect, url_for, flash, session
-from app.forms import LoginForm, SignUpForm, ApplicationForm, UploadSupportingDocs
-from app.models import User, Role, SupportingDocs
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
-from flask_login import login_user, logout_user, login_required
+from app.models import User, Role, SupportingDocs, Applicant
+from flask import render_template, request, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
+from flask import render_template, request, redirect, url_for, flash, session
+from app.forms import (
+    LoginForm, SignUpForm, ApplicationForm, UploadSupportingDocs, UploadTrn,
+    UploadNis, UploadNationalId, UploadBirthCertificate
+)
 
 """
 1. Is user logged out?
-Yes - Show them only login or signup pages
+Yes - Show them only login or sign_up pages
 No - Never show the above pages, redirect them to appropriate dashboard by default
 
 I think is_authenticated or some method in the flask_login lob  help with this
@@ -48,35 +52,99 @@ def is_applicant(user):
             return True
     return False
 
+
+def get_user_dashboard_url(user):
+    if is_admin(user):
+        return url_for('admin_dashboard')
+    return url_for('applicant_application')
+
+
+def redirect_unauthorized_role(check_role):
+    check_role_fallback_url_map = {
+        is_admin: 'admin_dashboard',
+        is_applicant: 'applicant_application',
+    }
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+
+    if not check_role(current_user):
+        route = check_role_fallback_url_map[check_role]
+        url = url_for(route)
+        return redirect(url)
+
+    return None
+
+
+def allow_applicant_role(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        unauthorized_redirect = redirect_unauthorized_role(is_applicant)
+        if unauthorized_redirect:
+            return unauthorized_redirect
+        return f(*args, **kwargs)
+
+
+def allow_admin_role(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        unauthorized_redirect = redirect_unauthorized_role(is_admin)
+        if unauthorized_redirect:
+            return unauthorized_redirect
+        return f(*args, **kwargs)
+
+
+def guest(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        if current_user.is_authenticated:
+            url = get_user_dashboard_url(current_user)
+            return redirect(url)
+        return f(*args, **kwargs)
+    return decorator
+
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))
+
 ###
 # Routing for your application.
 ###
 
 @app.route('/')
+@guest
 def home():
     """Render website's home page."""
     return render_template('home.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@guest
 def login():
-    form = LoginForm()
-    if request.method == "POST" and form.validate_on_submit():
-        if form.email.data:
-            email = form.email.data
-            password = form.password.data
-            user = User.query.filter_by(email=email).first()
-            if user is not None and check_password_hash(user.password, password):
-                login_user(user)
-                session['logged_in'] = True
-                flash('Logged in successfully.', 'success')
-                isAdmin = is_admin(user)
-                if isAdmin:
-                    redirect_url = url_for('admin_dashboard')
-                else:
-                    redirect_url = url_for('applicant_application')
-        else:
+    form = LoginForm(request.form)
+
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        user = User.query.filter_by(email=email).first()
+
+        is_credentials_valid = user and check_password_hash(user.password, password)
+
+        if not is_credentials_valid:
             flash('Username or Password is incorrect.', 'danger')
+        else:
+            login_user(user)
+            session['logged_in'] = True
+            flash('Logged in successfully.', 'success')
+            redirect_url = get_user_dashboard_url(user)
+            return redirect(redirect_url)
+    else:
+        flash_errors(form)
     return render_template("login.html", form=form)
 
 
@@ -89,33 +157,51 @@ def logout():
 
 
 @app.route('/sign-up', methods=['GET', 'POST'])
-def signUp():
+@guest
+def sign_up():
     form = SignUpForm(request.form)
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         email = form.email.data
-        password = form.password.data
         confirm = form.confirm.data
+        password = form.password.data
+
         user = User.query.filter_by(email=email).first()
-        if user is None:
+
+        if user:
+            flash('User with that email address already exist.', 'danger')
+        else:
             user = User(email, password)
             applicant_role = Role.query.filter_by(name='Applicant').first()
             user.roles = [applicant_role,]
+
             db.session.add(user)
             db.session.commit()
-            flash('Account created', 'success')
-            return redirect(url_for("login"))
-        else:
-            flash('User with that email address already exist.', 'danger')   
-    return render_template('sign-up.html', form=form)
 
+            flash('Account created', 'success')
+
+            login_url = url_for('login')
+            return redirect(login_url)
+    else:
+        flash_errors(form)
+    return render_template('sign-up.html', form=form)
 
 
 @app.route('/application', methods=['GET', 'POST'])
 @login_required
 def applicant_application():
-    form = ApplicationForm(request.form)
-    uploadForm = UploadSupportingDocs(request.form)
-    if request.method == "POST" and form.validate_on_submit():
+    applicant = Applicant.query.filter_by(user_id=current_user.id).first()
+    if request.method == 'GET' and applicant:
+        form = ApplicationForm(obj=applicant)
+    else:
+        form = ApplicationForm(request.form)
+
+    upload_form = UploadSupportingDocs()
+    upload_trn = UploadTrn()
+    upload_nis = UploadNis()
+    upload_national_id = UploadNationalId()
+    upload_birth_certificate = UploadBirthCertificate()
+
+    if form.validate_on_submit():
         first_name = form.first_name.data
         last_name = form.last_name.data
         mothers_maiden_name = form.mothers_maiden_name.data
@@ -130,24 +216,63 @@ def applicant_application():
         street2 = form.street2.data
         city = form.city.data
         parish = form.parish.data
-        country = form.county.data
+        country = form.country.data
         birth_certificateDoc = uploadForm.birth_certificate.data
         national_idDoc = uploadForm.national_id.data
         trnDoc = uploadForm.trn.data
         nisDoc = uploadForm.nis.data
+        
+        user = User.query.filter_by(id=current_user.id).first()
 
-        User.query.filter_by(id=userid).update(dict(first_name=first_name, last_name=last_name))
-        
-        Applicant.query.filter_by(userid=userid).update(dict(mothers_maiden_name=mothers_maiden_name, 
-        gender=gender, height=height, weight=weight, place_of_birth=place_of_birth,phone_number=phone_number, trn=trn, nis=nis))
-        
-        supportingDocs = SupportingDocs(userid=userid, national_id=national_idDoc, birth_certificate=birth_certificateDoc, trn=trnDoc, nis=nisDoc)
-        
-        db.session.add(supportingDocs)
+        if not user:
+            flash('Error retreiving user', 'danger')
+            return redirect(url_for('logout'))
+
+        if not applicant:
+            applicant = Applicant()
+            applicant.user_id = user.id
+            
+            db.session.add(applicant)
+            db.session.commit()
+
+            print('new applicant:', applicant)    
+
+        print('applicant:', applicant)
+
+        applicant_updates = dict(
+            first_name=first_name,
+            last_name=last_name,
+            mothers_maiden_name=mothers_maiden_name,
+            place_of_birth=place_of_birth, 
+            phone_number=phone_number,
+            gender=gender, 
+            height=height, 
+            weight=weight,
+            trn=trn, nis=nis,
+            street1=street1,
+            street2=street2,
+            country=country,
+            parish=parish,
+            city=city,
+        )
+
+        Applicant.query.filter_by(user_id=user.id).update(applicant_updates)
         db.session.commit()
-        return render_template('applicant_dashboard.html', form=form, uploadForm=uploadForm)
-    else:
-        return render_template('applicant_application.html', form=form, uploadForm=uploadForm)
+
+        # supportingDocs = SupportingDocs(userid=userid, national_id=national_idDoc, birth_certificate=birth_certificateDoc, trn=trnDoc, nis=nisDoc)
+        
+        # db.session.add(supportingDocs)
+        # db.session.commit()
+        
+    return render_template(
+        'applicant_application.html',
+        form=form,
+        upload_form=upload_form,
+        upload_trn=upload_trn,
+        upload_nis=upload_nis,
+        upload_national_id=upload_national_id,
+        upload_birth_certificate=upload_birth_certificate,
+    )
 
 
 @app.route('/applicant/dashboard')

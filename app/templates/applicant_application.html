@@ -19,8 +19,6 @@
                         
                         <ul class="uk-tab-right" uk-tab="connect: #component-tab-left; animation: uk-animation-fade">
                             <li class="uk-margin-top"><a href="#">User Profile</a></li>
-                            <li class="uk-margin-top"><a href="#">Biometrics</a></li>
-                            <li class="uk-margin-top"><a href="#">Residential Address</a></li>
                             <li class="uk-margin-top"><a href="#">Supporting Documents</a></li>
                         </ul>
                     </div>
@@ -31,82 +29,66 @@
                             <!-- User Profile -->
                             <li class="uk-margin-top">
                                 <form action="/application" method="post" enctype="multipart/form-data" >
+                                    {{ form.csrf_token }}
                                     <fieldset class="uk-fieldset">
-                                        <legend class="uk-legend uk-margin-large-bottom">User Profile</legend>        
-                                            <div class="uk-column-1-2">
-                                                <div class="uk-margin">
-                                                        {{ form.first_name(class="uk-input uk-width-medium", placeholder="First Name") }}
-                                                </div>
-                                                <div class="uk-margin">
-                                                        {{ form.mothers_maiden_name(class="uk-input uk-width-medium", placeholder="Mother's Maiden Name") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.place_of_birth(class="uk-input uk-width-medium", placeholder="Place of Birth") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.trn(class="uk-input uk-width-medium", placeholder="TRN") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.last_name(class="uk-input uk-width-medium", placeholder="Last Name") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.gender(class="uk-input uk-width-medium", placeholder="Gender") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.phone_number(class="uk-input uk-width-medium", placeholder="Phone Number") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.nis(class="uk-input uk-width-medium", placeholder="NIS") }}
-                                                </div>
-                                            </div>   
-                                            </fieldset>
-                                        </form>
-                            </li>
-                            
-
-                             <!-- Residential Address -->
-                             <li class="uk-margin-top">
-                                    <form action="/application" method="post" enctype="multipart/form-data" >
-                                        <fieldset class="uk-fieldset">   
-                                            <legend class="uk-legend uk-margin-large-bottom">Biometrics</legend>
-                                                <div class="uk-column-1-2">
-                                                    <div class="uk-margin">
-                                                            {{ form.weight(class="uk-input uk-width-medium", placeholder="Weight") }}
-                                                    </div>
-                                                    <div class="uk-margin ">
-                                                            {{ form.height(class="uk-input uk-width-medium", placeholder="Height") }}
-                                                    </div>
-                                                </div>
-                                        </fieldset>
-                                    </form>
-                                </li>
-
-                            <!-- Residential Address -->
-                            <li class="uk-margin-top">
-                                <form action="/application" method="post" enctype="multipart/form-data" >
-                                    <fieldset class="uk-fieldset">   
-                                        <legend class="uk-legend uk-margin-large-bottom">Residential Address</legend>
-                                            <div class="uk-column-1-2">
-                                                <div class="uk-margin">
-                                                        {{ form.street1(class="uk-input uk-width-medium", placeholder="Street 1") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.city(class="uk-input uk-width-medium", placeholder="City") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.country(class="uk-input uk-width-medium", placeholder="Country") }}
-                                                </div>
-                                                <div class="uk-margin ">
-                                                        {{ form.street2(class="uk-input uk-width-medium", placeholder="Street 2") }}
-                                                </div>
-                                                <div class="uk-margin">
-                                                    {{ form.parish(class="uk-input uk-width-medium", placeholder="Parish") }}
-                                                </div>
+                                        <legend class="uk-legend uk-margin-small-top uk-margin-small-bottom">User Profile</legend>        
+                                        <div class="uk-column-1-2">
+                                            <div class="uk-margin">
+                                                    {{ form.first_name(class="uk-input uk-width-medium", placeholder="First Name") }}
                                             </div>
+                                            <div class="uk-margin">
+                                                    {{ form.mothers_maiden_name(class="uk-input uk-width-medium", placeholder="Mother's Maiden Name") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.place_of_birth(class="uk-input uk-width-medium", placeholder="Place of Birth") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.trn(class="uk-input uk-width-medium", placeholder="TRN") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.last_name(class="uk-input uk-width-medium", placeholder="Last Name") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.gender(class="uk-input uk-width-medium", placeholder="Gender") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.phone_number(class="uk-input uk-width-medium", placeholder="Phone Number") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.nis(class="uk-input uk-width-medium", placeholder="NIS") }}
+                                            </div>
+                                        </div>
+                                        <legend class="uk-legend uk-margin-small-top uk-margin-small-bottom">Biometrics</legend>        
+                                        <div class="uk-column-1-2">
+                                            <div class="uk-margin">
+                                                    {{ form.weight(class="uk-input uk-width-medium", placeholder="Weight") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.height(class="uk-input uk-width-medium", placeholder="Height") }}
+                                            </div>
+                                        </div>
+                                        <legend class="uk-legend uk-margin-small-top uk-margin-small-bottom">Residential Address</legend>
+                                        <div class="uk-column-1-2">
+                                            <div class="uk-margin">
+                                                    {{ form.street1(class="uk-input uk-width-medium", placeholder="Street 1") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.city(class="uk-input uk-width-medium", placeholder="City") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.country(class="uk-input uk-width-medium", placeholder="Country") }}
+                                            </div>
+                                            <div class="uk-margin ">
+                                                    {{ form.street2(class="uk-input uk-width-medium", placeholder="Street 2") }}
+                                            </div>
+                                            <div class="uk-margin">
+                                                {{ form.parish(class="uk-input uk-width-medium", placeholder="Parish") }}
+                                            </div>
+                                        </div>
                                     </fieldset>
+                                    {{ form.submit(class="uk-button uk-button-primary  uk-margin-small-top") }}
                                 </form>
                             </li>
-
 
                             <!-- Supporting Docs Form -->
                             <li class="uk-margin-top">
@@ -114,32 +96,32 @@
                                     <fieldset class="uk-fieldset">    
                                         <legend class="uk-legend uk-margin-large-bottom">Supporting Documents</legend>        
                                             <div class="uk-column-1-2">
-                                                <div class="uk-margin" uk-margin>
-                                                    <div uk-form-custom="target: true">
-                                                        <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="Birth Certificate" name="birth_certificate" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="uk-margin" uk-margin>
-                                                    <div uk-form-custom="target: true">
-                                                        <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="National ID" name="national_id" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="uk-margin" uk-margin>
-                                                    <div uk-form-custom="target: true">
-                                                        <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="TRN" name="trn" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="uk-margin" uk-margin>
-                                                    <div uk-form-custom="target: true">
-                                                        <input type="file">
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="NIS" name="nis" disabled>
-                                                    </div>
+                                            <div class="uk-margin" uk-margin>
+                                                <div uk-form-custom="target: true">
+                                                    {{ upload_trn.trn() }}
+                                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="TRN" name="trn" disabled>
                                                 </div>
                                             </div>
-                                    <button class="uk-button uk-button-primary" type="submit">Submit</button>
+                                            <div class="uk-margin" uk-margin>
+                                                <div uk-form-custom="target: true">
+                                                    {{ upload_national_id.national_id() }}
+                                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="National ID" name="national_id" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="uk-margin" uk-margin>
+                                                <div uk-form-custom="target: true">
+                                                    {{ upload_birth_certificate.birth_certificate() }}
+                                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="Birth Certificate" name="birth_certificate" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="uk-margin" uk-margin>
+                                                <div uk-form-custom="target: true">
+                                                    {{ upload_nis.nis() }}
+                                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="NIS" name="nis" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{ form.submit(class="uk-button uk-button-primary") }}
                                     </fieldset>
                                 </form>
                             </li>

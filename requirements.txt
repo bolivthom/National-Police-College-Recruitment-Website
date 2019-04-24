@@ -5,15 +5,15 @@ Werkzeug==0.11.15
 click==6.7
 gunicorn==19.6.0
 itsdangerous==0.24
-wsgiref==0.1.2
+# wsgiref==0.1.2
 flask-login
 Flask-WTF
 Flask-SQLAlchemy
 Flask-Migrate
 Flask-Script
-psycopg2
+# psycopg2
 flask-sqlalchemy
 flask-script
 flask-migrate
 pymysql
-wtform-components
+# wtform-components
